@@ -17,11 +17,11 @@ function Students()
     getStudents();
     getCourses();
     getSchedules();
-    getGrades();
   },[]);
 
   useEffect(() => {
   getFilteredData();
+  getGrades();
   }, [search, schedules, students]);
 
   async function getStudents() {
@@ -73,7 +73,6 @@ function Students()
     <div className ='students'>
       <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search here"/>
       <div>
-        inside of div
         {filteredData.map((schedules) => (
           <Student 
           first={students.get(schedules.StudentID).First} 

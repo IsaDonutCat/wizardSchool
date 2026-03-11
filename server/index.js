@@ -30,15 +30,16 @@ for (const student of stuData.data)
    let courseNum = ""
    console.log("start adding courses")
    for (let i = 0; i <len; i++)
-   {
-      let ranNum = Math.floor(Math.random()*len);
-      console.log(totCouData[ranNum].CourseCode + " "+ totCouData[i].CourseCode)
+   {  
+      let courseData = totCouData;
+      let ranNum = Math.floor(Math.random()*courseData.length);
+      console.log(courseData[ranNum].CourseCode + " "+ courseData[i].CourseCode)
       courseNum = "Course" + (i+1);
       const { addErr } = await supabase
       .from('Schedules')
-      .update({ [courseNum]: `${totCouData[ranNum].CourseCode}` })
+      .update({ [courseNum]: `${courseData[ranNum].CourseCode}` })
       .eq('StudentID', `${stuId}`)
-      
+      courseData.splice(ranNum, 1);
       if (i ==2)
       {
          break;
