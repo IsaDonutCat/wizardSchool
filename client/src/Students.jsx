@@ -3,7 +3,7 @@ const supaUrl = "https://byyqrzsfnteoqtxtjuhp.supabase.co";
 import { createClient } from "@supabase/supabase-js";
 import { useEffect, useState } from "react";
 const supabase = createClient(supaUrl, supaKey);
-
+import axios from 'axios'
 function Students()
 {
   const [students, setStudents] = useState(new Map());
@@ -12,6 +12,7 @@ function Students()
   const [search, setSearch] = useState('');
   const [filteredData, setFilteredData] = useState([]);
   const [grades, setGrades] = useState(new Map());
+  const [addStu, setAddStu] = useState(false);
   useEffect(()=>
   {
     getStudents();
@@ -23,7 +24,6 @@ function Students()
   getFilteredData();
   getGrades();
   }, [search, schedules, students]);
-
   async function getStudents() {
     const { data } = await supabase.from("Students").select();
     const newMap = new Map(); // Cloning the Map to keep immutability
@@ -69,8 +69,31 @@ function Students()
     );
   setFilteredData(newData);
   }
+
+const addStudent = () => {
+  const { data, loading, error } = usePost(
+    "MY_URL",
+    { DATA: MY_DATA }
+  );
+  if (data && !error) {
+    navigate(`/`);
+  }
+};
+
   return (
     <div className ='students'>
+      <button onclick={addStu=!addStu}>Add Student</button>
+      {addStu &&  
+        <form>
+          <label for="newFirst">New Student's First Name:</label>
+          <input required type="text" id="newFirst" name="newFirst" />
+          <label for="newLast">New Student's Last Name:</label>
+          <input required type="text" id="newLast" name="newLast" placeholder="New Student's Last Name" />
+          <label for="newYear">New Student's Year:</label>
+          <input required type="number" id="newYear" name="newYear" min="1" max="4" />
+          <button onclick={addStudent}>Add Student</button>
+        </form>
+      }
       <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search here"/>
       <div>
         {filteredData.map((schedules) => (
